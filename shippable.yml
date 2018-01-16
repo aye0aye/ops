@@ -244,9 +244,9 @@ jobs:
         switch: off
       - IN: demo_aws_cli
         switch: off
-      - IN: test_vpc_info
-        switch: off
       - IN: test_params_ansible
+        switch: off
+      - IN: test_vpc_info
         switch: off
       - IN: demo_aws_pem
         switch: off

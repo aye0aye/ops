@@ -10,7 +10,7 @@
     user_data: "{{ ec2_user_data }}"
     vpc_subnet_id: "{{ ec2_subnet_ids|random }}"
     region: "{{ ec2_region }}"
-    instance_tags: '{"Name":"{{ec2_tag_Role}}","Role":"{{ec2_tag_Role}}","Type":"{{ec2_tag_Type}}","Environment":"{{ec2_tag_Environment}}"}'
+    instance_tags: '{"Role":"{{ec2_tag_Role}}","Type":"{{ec2_tag_Type}}","Environment":"{{ec2_tag_Environment}}"}'
     assign_public_ip: yes
     wait: true
     exact_count: "{{ ec2_count }}"
