@@ -8,7 +8,6 @@
     instance_profile_name: "ecsInstanceRole"
     image: "{{ ec2_image }}"
     user_data: "#!/bin/bash \n echo ECS_CLUSTER={{ ecs_cluster_name }} > /etc/ecs/ecs.config"
-#    user_data: "{{ ec2_user_data }}"
     vpc_subnet_id: "{{ ec2_subnet_ids|random }}"
     region: "{{ ec2_region }}"
     instance_tags: '{"Role":"{{ec2_tag_Role}}","Type":"{{ec2_tag_Type}}","Environment":"{{ec2_tag_Environment}}"}'
@@ -17,11 +16,6 @@
     exact_count: "{{ ec2_count }}"
     count_tag:
       Role: "{{ ec2_tag_Role }}"
-#    volumes:
-#      - device_name: /dev/xvda
-#        volume_type: gp2
-#        volume_size: "{{ ec2_volume_size }}"
-#        delete_on_termination: true
   register: ec2
 
 - add_host: 

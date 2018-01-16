@@ -1,14 +1,14 @@
 ---
 - name: Get EC2 instance IDs for registered container instances
   run_once: true
-  ec2_remote_facts:
+  ec2_instance_facts:
     filters:
       instance-state-name: running
+  register: instances
+
 #      "tag:Type": "{{ ec2_tag_Type }}"
 #      "tag:Role": "{{ ec2_tag_Role }}"
 #      "tag:Environment": "{{ ec2_tag_Environment }}"
-
-  register: instances
 
 - name: display instances
   run_once: true
