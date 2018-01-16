@@ -17,3 +17,5 @@
     shipctl put_resource_state "{{ STATE_RES_NAME }}" "CLUSTER_NAME" "{{ ECS_CLUSTER_NAME }}"
     shipctl put_resource_state "{{ STATE_RES_NAME }}" "REGION" "{{ ec2_region }}"
     shipctl put_resource_state "{{ STATE_RES_NAME }}" "CLUSTER_ARN" "{{ ecs.cluster.clusterArn }}"
+    shipctl put_resource_state "{{ CLUSTER_RES_NAME }}" "region" "{{ ec2_region }}"
+    shipctl put_resource_state "{{ CLUSTER_RES_NAME }}" "sourceName" "{{ ECS_CLUSTER_NAME }}"

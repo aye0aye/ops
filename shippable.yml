@@ -39,14 +39,14 @@ resources:
     type: params
     versionTemplate:
       params:
-        EC2_REGION: "us-east-1"
         EC2_TAG_ROLE: "test_env_demo"
         EC2_TAG_TYPE: "ecs_container_instance"
+        VPC_KEYPAIR_NAME: "us_east_1_key"
         EC2_VOLUME_SIZE: 30
         EC2_COUNT: 2
+        EC2_INSTANCE_TYPE: "t2.micro"
         ECS_CLUSTER_NAME: "test_env_demo"
         ENVIRONMENT: "test"
-        STATE_RES_NAME: "test_env_info"
 
 # Output of TEST environment provisioning
   - name: test_env_info
@@ -205,27 +205,32 @@ jobs:
     dependencyMode: strict
     triggerMode: parallel
     steps:
+      - IN: ami_secops_approved
       - IN: demo_aws_cli
         switch: off
       - IN: test_params_ansible
         switch: off
       - IN: demo_aws_pem
         switch: off
-#      - IN: test_vpc_info
-#        switch: off
-      - IN: infra_repo
+      - IN: test_vpc_info
         switch: off
-      - IN: ami_secops_approved
+      - IN: infra_repo
         switch: off
       - TASK:
           script:
             - sudo pip install boto3
             - pushd $(shipctl get_resource_state "infra_repo")
             - cd ./infra/provision-ecs-ansible
+            - export STATE_RES_NAME="test_env_info"
+            - export CLUSTER_RES_NAME="test_env_ecs"
+            - export AMI_ID=$(shipctl get_resource_version_key ami_secops_approved AMI_ID)
             - shipctl replace ansible.cfg ./group_vars/ecs-cluster-vars.yml
             - ansible-playbook -v ansible-ecs-provision.yml
             - popd
       - OUT: test_env_info
+        overwrite: true
+      - OUT: test_env_ecs
+        overwrite: true
     flags:
       - e2e_demo_app
 
