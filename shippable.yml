@@ -223,12 +223,9 @@ jobs:
             - cd ./infra/provision-ecs-ansible
             - export STATE_RES_NAME="test_env_info"
             - export CLUSTER_RES_NAME="test_env_ecs"
-            - echo $(shipctl get_resource_version_key ami_secops_approved AMI_ID)
-            - echo $(shipctl get_resource_version_name ami_secops_approved)
-            - export AMI_ID=$(shipctl get_resource_version_key ami_secops_approved AMI_ID)
-            - echo $AMI_ID
-#            - shipctl replace ansible.cfg ./group_vars/ecs-cluster-vars.yml
-#            - ansible-playbook -v ansible-ecs-provision.yml
+            - export AMI_ID=$(shipctl get_resource_version_name ami_secops_approved)
+            - shipctl replace ansible.cfg ./group_vars/ecs-cluster-vars.yml
+            - ansible-playbook -v ansible-ecs-provision.yml
             - popd
       - OUT: test_env_info
         overwrite: true

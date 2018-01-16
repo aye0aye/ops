@@ -27,8 +27,8 @@
           <file leaf-file-name="shippable.yml" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/shippable.yml">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="458">
-                  <caret line="228" column="26" selection-start-line="228" selection-start-column="26" selection-end-line="228" selection-end-column="26" />
+                <state relative-caret-position="428">
+                  <caret line="226" column="0" selection-start-line="226" selection-start-column="0" selection-end-line="227" selection-end-column="59" />
                   <folding />
                 </state>
               </provider>
@@ -615,8 +615,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/shippable.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="228" column="26" selection-start-line="228" selection-start-column="26" selection-end-line="228" selection-end-column="26" />
+        <state relative-caret-position="428">
+          <caret line="226" column="0" selection-start-line="226" selection-start-column="0" selection-end-line="227" selection-end-column="59" />
           <folding />
         </state>
       </provider>
