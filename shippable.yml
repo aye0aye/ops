@@ -53,7 +53,7 @@ resources:
     type: params
     versionTemplate:
       params:
-        SEED: "initial_version"
+        STATUS: "empty"
 
 #
 ##################################################################
@@ -265,6 +265,10 @@ jobs:
             - shipctl replace ansible.cfg ./group_vars/ecs-cluster-vars.yml
             - ansible-playbook -v ansible-ecs-terminate.yml
             - popd
+      - OUT: test_env_info
+        overwrite: true
+      - OUT: test_env_ecs
+        overwrite: true
     flags:
       - e2e_demo_app
 

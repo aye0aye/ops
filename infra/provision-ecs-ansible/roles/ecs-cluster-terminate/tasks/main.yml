@@ -14,5 +14,5 @@
 # update Shippable resource state with provisioned CLUSTER_ARN
 - name: run cmd
   shell: |
-    shipctl put_resource_state "{{ STATE_RES_NAME }}" CLUSTER_ARN " "
-    shipctl put_resource_state "{{ STATE_RES_NAME }}" CLUSTER_NAME " "
+    shipctl put_resource_state "{{ STATE_RES_NAME }}" STATUS "empty"
+    shipctl put_resource_state "{{ CLUSTER_RES_NAME }}" STATUS "empty"
