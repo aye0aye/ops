@@ -3,9 +3,10 @@
   run_once: true
   ec2_remote_facts:
     filters:
+      instance-state-name: running
 #      "tag:Type": "{{ ec2_tag_Type }}"
 #      "tag:Role": "{{ ec2_tag_Role }}"
-      "tag:Environment": "{{ ec2_tag_Environment }}"
+#      "tag:Environment": "{{ ec2_tag_Environment }}"
 
   register: instances
 
