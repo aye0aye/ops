@@ -4,7 +4,9 @@
   ec2_remote_facts:
     filters:
 #      "tag:Type": "{{ ec2_tag_Type }}"
-      "tag:Role": "{{ ec2_tag_Role }}"
+#      "tag:Role": "{{ ec2_tag_Role }}"
+      "tag:Environment": "{{ ec2_tag_Environment }}"
+
   register: instances
 
 - name: display instances
