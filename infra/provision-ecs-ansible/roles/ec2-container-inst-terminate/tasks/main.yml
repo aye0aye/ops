@@ -1,7 +1,7 @@
 ---
 - name: Get EC2 instance IDs for registered container instances
   run_once: true
-  ec2_instance_facts:
+  ec2_remote_facts:
     filters:
       instance-state-name: running
   register: instances
