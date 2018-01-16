@@ -19,6 +19,7 @@
 - name: Remove registered container instances
   run_once: true
   ec2:
+    region: "{{ ec2_region }}"
     state: absent
     wait: true
     instance_ids: "{{instances|json_query('instances[*].id')}}"
