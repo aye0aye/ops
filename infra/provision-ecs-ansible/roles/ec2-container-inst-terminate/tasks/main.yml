@@ -1,28 +1,28 @@
 ---
 - name: Execute the command in remote shell; stdout goes to the specified file on the remote.
   shell: echo "AVIN"
-#
-#- name: Get EC2 instance IDs for registered container instances
-#  run_once: true
-#  ec2_remote_facts:
-#  register: instances
-#
-##    filters:
-##      instance-state-name: running
-##      "tag:Type": "{{ ec2_tag_Type }}"
-##      "tag:Role": "{{ ec2_tag_Role }}"
-##      "tag:Environment": "{{ ec2_tag_Environment }}"
-#
-#- name: display instances
-#  run_once: true
-#  debug:
-#    var: instances
-#
-#- name: Remove registered container instances
-#  run_once: true
-#  ec2:
-#    state: absent
-#    wait: true
-#    instance_ids: "{{instances|json_query('instances[*].id')}}"
-#  when: instances
-#
+
+- name: Get EC2 instance IDs for registered container instances
+  run_once: true
+  ec2_remote_facts:
+  register: instances
+
+#    filters:
+#      instance-state-name: running
+#      "tag:Type": "{{ ec2_tag_Type }}"
+#      "tag:Role": "{{ ec2_tag_Role }}"
+#      "tag:Environment": "{{ ec2_tag_Environment }}"
+
+- name: display instances
+  run_once: true
+  debug:
+    var: instances
+
+- name: Remove registered container instances
+  run_once: true
+  ec2:
+    state: absent
+    wait: true
+    instance_ids: "{{instances|json_query('instances[*].id')}}"
+  when: instances
+
