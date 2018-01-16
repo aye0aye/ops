@@ -5,9 +5,9 @@
     shipctl post_resource_state "{{ STATE_RES_NAME }}" versionName "build-${BUILD_NUMBER}"
 
 # Terminate ECS cluster
-- name: Terminate ECS Cluster {{ ECS_CLUSTER_NAME }}
+- name: Terminate ECS Cluster {{ ecs_cluster_name }}
   ecs_cluster:
-    name: "{{ ECS_CLUSTER_NAME }}"
+    name: "{{ ecs_cluster_name }}"
     state: absent
   register: ecs
 

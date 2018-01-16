@@ -1,7 +1,7 @@
 ec2_instance_type: "${EC2_INSTANCE_TYPE}"
 ec2_image: "${AMI_ID}"
 ec2_keypair: "${VPC_KEYPAIR_NAME}"
-ec2_user_data: "#!/bin/bash \n echo ECS_CLUSTER=\"${ECS_CLUSTER_NAME}\" >> /etc/ecs/ecs.config"
+#ec2_user_data: "#!/bin/bash \n echo ECS_CLUSTER=\"${ecs_cluster_name}\" >> /etc/ecs/ecs.config"
 ec2_region: "${REGION}"
 ec2_tag_Role: "${EC2_TAG_ROLE}"
 ec2_tag_Type: "${EC2_TAG_TYPE}"
@@ -14,10 +14,10 @@ CLUSTER_RES_NAME: "${CLUSTER_RES_NAME}"
 ec2_security_group: "${TEST_PUBLIC_SG_ID}"
 ec2_subnet_ids: ["${TEST_PUBLIC_SN_01_ID}","${TEST_PUBLIC_SN_02_ID}"]
 ec2_tag_Environment: "${ENVIRONMENT}"
-ECS_CLUSTER_NAME: "${ECS_CLUSTER_NAME}"
+ecs_cluster_name: "${ECS_CLUSTER_NAME}"
 
 # for local testing - uncomment below
 # ec2_security_group: "sg-d95ab7a9"
 # ec2_subnet_ids: ["subnet-f9fe0f9d","subnet-3a95fe16"]
 # ec2_tag_Environment: "test"
-# ECS_CLUSTER_NAME: "test-ecs-cluster"
+# ecs_cluster_name: "test-ecs-cluster"
