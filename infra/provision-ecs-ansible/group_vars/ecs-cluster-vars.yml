@@ -8,7 +8,7 @@ ec2_tag_Type: "${EC2_TAG_TYPE}"
 ec2_volume_size: ${EC2_VOLUME_SIZE}
 ec2_count: ${EC2_COUNT}
 STATE_RES_NAME: "${STATE_RES_NAME}"
-CLUSTER_RES_NAME: "${STATE_RES_NAME}"
+CLUSTER_RES_NAME: "${CLUSTER_RES_NAME}"
 
 # comment out when performing local testing
 ec2_security_group: "${TEST_PUBLIC_SG_ID}"
