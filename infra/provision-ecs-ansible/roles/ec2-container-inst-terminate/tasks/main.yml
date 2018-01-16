@@ -3,13 +3,12 @@
   run_once: true
   ec2_remote_facts:
     region: "{{ ec2_region }}"
+    filters:
+      instance-state-name: running
+      "tag:Type": "{{ ec2_tag_Type }}"
+      "tag:Role": "{{ ec2_tag_Role }}"
+      "tag:Environment": "{{ ec2_tag_Environment }}"
   register: instances
-
-#    filters:
-#      instance-state-name: running
-#      "tag:Type": "{{ ec2_tag_Type }}"
-#      "tag:Role": "{{ ec2_tag_Role }}"
-#      "tag:Environment": "{{ ec2_tag_Environment }}"
 
 - name: display instances
   run_once: true
@@ -24,4 +23,3 @@
     wait: true
     instance_ids: "{{instances|json_query('instances[*].id')}}"
   when: instances
-
