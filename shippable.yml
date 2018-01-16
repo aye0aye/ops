@@ -211,8 +211,8 @@ jobs:
         switch: off
       - IN: demo_aws_pem
         switch: off
-      - IN: test_vpc_info
-        switch: off
+#      - IN: test_vpc_info
+#        switch: off
       - IN: infra_repo
         switch: off
       - IN: ami_secops_approved
@@ -225,7 +225,7 @@ jobs:
             - shipctl replace ansible.cfg ./group_vars/ecs-cluster-vars.yml
             - ansible-playbook -v ansible-ecs-provision.yml
             - popd
-      - OUT: test_ansible_info
+      - OUT: test_env_info
     flags:
       - e2e_demo_app
 
