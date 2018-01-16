@@ -7,7 +7,7 @@
     instance_type: "{{ ec2_instance_type }}"
     instance_profile_name: "ecsInstanceRole"
     image: "{{ ec2_image }}"
-    user_data: "#!/bin/bash \n echo ECS_CLUSTER={{ ecs_cluster_name }} >> /etc/ecs/ecs.config"
+    user_data: "#!/bin/bash \n echo ECS_CLUSTER={{ ecs_cluster_name }} > /etc/ecs/ecs.config"
 #    user_data: "{{ ec2_user_data }}"
     vpc_subnet_id: "{{ ec2_subnet_ids|random }}"
     region: "{{ ec2_region }}"
