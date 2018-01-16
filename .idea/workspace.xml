@@ -2,40 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7f78f7c5-21ee-48a2-8bfa-7153ea6cd4fe" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/archiveProvisionState.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/archiveState.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsProdECS/cluster.tf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsProdECS/output.tf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsProdECS/provProdInfra.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsProdECS/provider.tf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsProdECS/public0-0.tf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsProdECS/terraform.tfvars" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsProdECS/variables.tf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsTestECS/cluster.tf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsTestECS/output.tf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsTestECS/provTestInfra.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsTestECS/provider.tf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsTestECS/public0-0.tf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/awsTestECS/variables.tf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/ansible-ecs-provision.yml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/ansible-ecs-terminate.yml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/ansible.cfg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/group_vars/ecs-cluster-vars.yml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/inventory/base" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/inventory/ec2.ini" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/inventory/ec2.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/inventory/static_hosts" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ec2-container-inst-provision/tasks/main.yml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ec2-container-inst-terminate/tasks/main.yml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ecs-cluster-provision/tasks/main.yml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ecs-cluster-terminate/tasks/main.yml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ecs-services-terminate/tasks/main.yml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-kube-kops/kube-cluster.yaml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provisionAWS.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/setVer.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/shipUtil.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/shippable.yml" afterPath="$PROJECT_DIR$/shippable.yml" />
     </list>
     <ignored path="ops.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -60,8 +27,8 @@
           <file leaf-file-name="shippable.yml" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/shippable.yml">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="720">
-                  <caret line="48" column="39" selection-start-line="48" selection-start-column="39" selection-end-line="48" selection-end-column="39" />
+                <state relative-caret-position="538">
+                  <caret line="216" column="19" selection-start-line="216" selection-start-column="19" selection-end-line="216" selection-end-column="19" />
                   <folding />
                 </state>
               </provider>
@@ -530,8 +497,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/shippable.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="48" column="39" selection-start-line="48" selection-start-column="39" selection-end-line="48" selection-end-column="39" />
+        <state relative-caret-position="538">
+          <caret line="216" column="19" selection-start-line="216" selection-start-column="19" selection-end-line="216" selection-end-column="19" />
           <folding />
         </state>
       </provider>

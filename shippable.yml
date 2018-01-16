@@ -205,7 +205,7 @@ jobs:
     dependencyMode: strict
     triggerMode: parallel
     steps:
-      - IN: aws_cli
+      - IN: demo_aws_cli
         switch: off
       - IN: test_params_ansible
         switch: off
