@@ -5,5 +5,4 @@
 # add empty entries for groups that ec2 plugin will populate
 [tag_Role_test_env_demo]
 
-#[ecsinstances:children]
-tag_Role_test_env_demo
+[ecsinstances:children]
