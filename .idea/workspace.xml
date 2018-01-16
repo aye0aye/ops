@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7f78f7c5-21ee-48a2-8bfa-7153ea6cd4fe" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ec2-container-inst-terminate/tasks/main.yml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/shippable.yml" afterPath="$PROJECT_DIR$/shippable.yml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ec2-container-inst-terminate/tasks/main.yml" />
     </list>
     <ignored path="ops.iws" />
     <ignored path=".idea/workspace.xml" />
