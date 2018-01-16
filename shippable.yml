@@ -263,8 +263,7 @@ jobs:
             - export CLUSTER_RES_NAME="test_env_ecs"
             - export AMI_ID=$(shipctl get_resource_version_name ami_secops_approved)
             - shipctl replace ansible.cfg group_vars/ecs-cluster-vars.yml
-            - cat ansible.cfg
-            - cat group_vars/ecs-cluster-vars.yml
+            - cat inventory/base
             - ansible-playbook -v ansible-ecs-terminate.yml
             - popd
       - OUT: test_env_info
