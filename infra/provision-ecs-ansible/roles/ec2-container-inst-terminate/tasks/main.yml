@@ -1,4 +1,7 @@
 ---
+- name: Execute the command in remote shell; stdout goes to the specified file on the remote.
+  shell: echo "AVIN"
+
 - name: Get EC2 instance IDs for registered container instances
   run_once: true
   ec2_remote_facts:
