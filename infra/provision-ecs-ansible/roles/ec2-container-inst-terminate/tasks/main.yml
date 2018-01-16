@@ -3,7 +3,7 @@
   run_once: true
   ec2_remote_facts:
     filters:
-      "tag:Type": "{{ ec2_tag_Type }}"
+#      "tag:Type": "{{ ec2_tag_Type }}"
       "tag:Role": "{{ ec2_tag_Role }}"
   register: instances
 
