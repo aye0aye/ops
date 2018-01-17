@@ -1,5 +1,5 @@
 ec2_instance_type: "${EC2_INSTANCE_TYPE}"
-ec2_image: "${AMI_ID}"
+ec2_image: "${ECS_AMI}"
 ec2_keypair: "${VPC_KEYPAIR_NAME}"
 #ec2_user_data: "#!/bin/bash \n echo ECS_CLUSTER=\"${ecs_cluster_name}\" >> /etc/ecs/ecs.config"
 ec2_region: "${REGION}"
