@@ -41,7 +41,7 @@ resources:
       params:
         EC2_TAG_ROLE: "test_env_demo"
         EC2_TAG_TYPE: "ecs_container_instance"
-        VPC_KEYPAIR_NAME: "us_east_1_key"
+        VPC_KEYPAIR_NAME: "demo_us_east_1"
         EC2_VOLUME_SIZE: 30
         EC2_COUNT: 2
         EC2_INSTANCE_TYPE: "t2.micro"

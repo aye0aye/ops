@@ -3,7 +3,7 @@
 - hosts: localhost
   connection: local
   gather_facts: false
-  user: root
+#  user: root
   pre_tasks:
     - include_vars: group_vars/ecs-cluster-vars.yml
   roles:

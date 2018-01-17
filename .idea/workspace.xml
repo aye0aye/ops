@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7f78f7c5-21ee-48a2-8bfa-7153ea6cd4fe" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/infra/provision-ecs-ansible/ansible-ecs-provision.yml" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/ansible-ecs-provision.yml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/infra/provision-ecs-ansible/ansible-ecs-terminate.yml" afterPath="$PROJECT_DIR$/infra/provision-ecs-ansible/ansible-ecs-terminate.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/shippable.yml" afterPath="$PROJECT_DIR$/shippable.yml" />
     </list>
     <ignored path="ops.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -23,21 +23,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.yml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ec2-container-inst-provision/tasks/main.yml">
+      <file leaf-file-name="shippable.yml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/shippable.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+            <state relative-caret-position="735">
+              <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ansible-ecs-provision.yml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/infra/provision-ecs-ansible/ansible-ecs-provision.yml">
+      <file leaf-file-name="main.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ec2-container-inst-provision/tasks/main.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state relative-caret-position="450">
+              <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -57,11 +57,11 @@
         <option value="$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ecs-services-terminate/tasks/main.yml" />
         <option value="$PROJECT_DIR$/infra/provision-ecs-ansible/inventory/base" />
         <option value="$PROJECT_DIR$/infra/provision-ecs-ansible/group_vars/ecs-cluster-vars.yml" />
-        <option value="$PROJECT_DIR$/shippable.yml" />
         <option value="$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ec2-container-inst-provision/tasks/main.yml" />
         <option value="$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ec2-container-inst-terminate/tasks/main.yml" />
-        <option value="$PROJECT_DIR$/infra/provision-ecs-ansible/ansible-ecs-terminate.yml" />
         <option value="$PROJECT_DIR$/infra/provision-ecs-ansible/ansible-ecs-provision.yml" />
+        <option value="$PROJECT_DIR$/infra/provision-ecs-ansible/ansible-ecs-terminate.yml" />
+        <option value="$PROJECT_DIR$/shippable.yml" />
       </list>
     </option>
   </component>
@@ -203,6 +203,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="tasks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ops" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ops" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="infra" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="provision-ecs-ansible" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inventory" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -484,22 +506,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/infra/provision-ecs-ansible/ansible.cfg">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/infra/provision-ecs-ansible/inventory/base">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ec2-container-inst-terminate/tasks/main.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
@@ -524,22 +530,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shippable.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="48" column="27" selection-start-line="48" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ec2-container-inst-provision/tasks/main.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/infra/provision-ecs-ansible/ansible-ecs-terminate.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -552,6 +542,38 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/infra/provision-ecs-ansible/roles/ec2-container-inst-provision/tasks/main.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/infra/provision-ecs-ansible/inventory/base">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/infra/provision-ecs-ansible/ansible.cfg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shippable.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
           <folding />
         </state>
       </provider>
