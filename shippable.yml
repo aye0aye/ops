@@ -15,6 +15,13 @@ resources:
       sourceName: "aye0aye/ops"
       branch: master
 
+ - name: slack_not
+    type: notification
+    integration: demo_slack
+    pointer:
+      recipients:
+        - "#demo"
+
 ##################################################################
 #### AWS Provisioning Resources
 ##################################################################
@@ -343,8 +350,8 @@ jobs:
         switch: off
       - TASK: managed
         bump: final
-#    notify:
-#      - on_success: slack
+    notify:
+      - on_success: slack_not
     flags:
       - e2e_demo_app
 
