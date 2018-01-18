@@ -9,8 +9,8 @@ ec2_count: ${EC2_COUNT}
 CLUSTER_RES_NAME: "${CLUSTER_RES_NAME}"
 
 # comment out when performing local testing
-ec2_security_group: "${TEST_PUBLIC_SG_ID}"
-ec2_subnet_ids: ["${TEST_PUBLIC_SN_01_ID}","${TEST_PUBLIC_SN_02_ID}"]
+ec2_security_group: "${PUBLIC_SG_ID}"
+ec2_subnet_ids: ["${PUBLIC_SN_01_ID}","${PUBLIC_SN_02_ID}"]
 ec2_tag_Environment: "${ENVIRONMENT}"
 ecs_cluster_name: "${ECS_CLUSTER_NAME}"
 
