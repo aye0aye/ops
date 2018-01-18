@@ -15,7 +15,7 @@ resources:
       sourceName: "aye0aye/ops"
       branch: master
 
- - name: slack_not
+  - name: slack_not
     type: notification
     integration: demo_slack
     pointer:
