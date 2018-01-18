@@ -333,12 +333,26 @@ jobs:
     flags:
       - e2e_demo_app
 
+# Create PROD Release
+  - name: release_prod
+    type: release
+    steps:
+      - IN: auto_bvt
+        switch: off
+      - IN: deploy_test_app
+        switch: off
+      - TASK: managed
+        bump: final
+#    notify:
+#      - on_success: slack
+    flags:
+      - e2e_demo_app
+
 # PROD deployment to Amazon ECS
   - name: deploy_prod_app
     type: deploy
     steps:
-#      - IN: e2eshipdemo-release-ecs-prod
-#        switch: off
+      - IN: release_prod
       - IN: prod_params_app
       - IN: prod_img_opts_app
       - IN: prod_replicas_app
