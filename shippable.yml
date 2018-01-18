@@ -225,9 +225,9 @@ jobs:
             - cd ./infra/provision-ecs-ansible
             - export CLUSTER_RES_NAME="test_env_ecs"
             - export AMI_ID=$(shipctl get_resource_version_name ami_secops_approved)
-            - export PUBLIC_SN_01_ID=$PROD_PUBLIC_SN_01_ID
-            - export PUBLIC_SN_02_ID=$PROD_PUBLIC_SN_02_ID
-            - export PUBLIC_SG_ID=$PROD_PUBLIC_SG_ID
+            - export PUBLIC_SN_01_ID=$TEST_PUBLIC_SN_01_ID
+            - export PUBLIC_SN_02_ID=$TEST_PUBLIC_SN_02_ID
+            - export PUBLIC_SG_ID=$TEST_PUBLIC_SG_ID
             - shipctl replace ansible.cfg group_vars/ecs-cluster-vars.yml
             - ansible-playbook -v ansible-ecs-terminate.yml
             - popd
@@ -260,6 +260,9 @@ jobs:
             - cd ./infra/provision-ecs-ansible
             - export CLUSTER_RES_NAME="prod_env_ecs"
             - export AMI_ID=$(shipctl get_resource_version_name ami_secops_approved)
+            - export PUBLIC_SN_01_ID=$PROD_PUBLIC_SN_01_ID
+            - export PUBLIC_SN_02_ID=$PROD_PUBLIC_SN_02_ID
+            - export PUBLIC_SG_ID=$PROD_PUBLIC_SG_ID
             - shipctl replace ansible.cfg ./group_vars/ecs-cluster-vars.yml
             - ansible-playbook -v ansible-ecs-provision.yml
             - popd
@@ -293,6 +296,9 @@ jobs:
             - cd ./infra/provision-ecs-ansible
             - export CLUSTER_RES_NAME="prod_env_ecs"
             - export AMI_ID=$(shipctl get_resource_version_name ami_secops_approved)
+            - export PUBLIC_SN_01_ID=$PROD_PUBLIC_SN_01_ID
+            - export PUBLIC_SN_02_ID=$PROD_PUBLIC_SN_02_ID
+            - export PUBLIC_SG_ID=$PROD_PUBLIC_SG_ID
             - shipctl replace ansible.cfg group_vars/ecs-cluster-vars.yml
             - ansible-playbook -v ansible-ecs-terminate.yml
             - popd
