@@ -49,13 +49,6 @@ resources:
         ECS_CLUSTER_NAME: "test_env_demo"
         ENVIRONMENT: "test"
 
-# Output of TEST environment provisioning
-  - name: test_env_info
-    type: params
-    versionTemplate:
-      params:
-        STATUS: "empty"
-
 #
 ##################################################################
 #### Kubernetes cluster on AWS resources
@@ -222,14 +215,11 @@ jobs:
             - sudo pip install boto3
             - pushd $(shipctl get_resource_state "infra_repo")
             - cd ./infra/provision-ecs-ansible
-            - export STATE_RES_NAME="test_env_info"
             - export CLUSTER_RES_NAME="test_env_ecs"
             - export AMI_ID=$(shipctl get_resource_version_name ami_secops_approved)
             - shipctl replace ansible.cfg ./group_vars/ecs-cluster-vars.yml
             - ansible-playbook -v ansible-ecs-provision.yml
             - popd
-      - OUT: test_env_info
-        overwrite: true
       - OUT: test_env_ecs
         overwrite: true
     flags:
@@ -260,15 +250,12 @@ jobs:
             - sudo pip install boto3
             - pushd $(shipctl get_resource_state "infra_repo")
             - cd ./infra/provision-ecs-ansible
-            - export STATE_RES_NAME="test_env_info"
             - export CLUSTER_RES_NAME="test_env_ecs"
             - export AMI_ID=$(shipctl get_resource_version_name ami_secops_approved)
             - shipctl replace ansible.cfg group_vars/ecs-cluster-vars.yml
             - cat inventory/base
             - ansible-playbook -v ansible-ecs-terminate.yml
             - popd
-      - OUT: test_env_info
-        overwrite: true
       - OUT: test_env_ecs
         overwrite: true
     flags:

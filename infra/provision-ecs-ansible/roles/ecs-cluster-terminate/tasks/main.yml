@@ -2,7 +2,7 @@
 # update Shippable resource state with this job number
 - name: run cmd
   shell: |
-    shipctl post_resource_state "{{ STATE_RES_NAME }}" versionName "build-${BUILD_NUMBER}"
+    shipctl post_resource_state "{{ CLUSTER_RES_NAME }}" versionName "build-${BUILD_NUMBER}"
 
 # Terminate ECS cluster
 - name: Terminate ECS Cluster {{ ecs_cluster_name }}
@@ -14,5 +14,4 @@
 # update Shippable resource state with provisioned CLUSTER_ARN
 - name: run cmd
   shell: |
-    shipctl put_resource_state "{{ STATE_RES_NAME }}" STATUS "empty"
     shipctl put_resource_state "{{ CLUSTER_RES_NAME }}" STATUS "empty"

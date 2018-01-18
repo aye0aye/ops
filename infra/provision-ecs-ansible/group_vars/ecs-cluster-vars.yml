@@ -6,7 +6,6 @@ ec2_region: "${REGION}"
 ec2_tag_Role: "${EC2_TAG_ROLE}"
 ec2_tag_Type: "${EC2_TAG_TYPE}"
 ec2_count: ${EC2_COUNT}
-STATE_RES_NAME: "${STATE_RES_NAME}"
 CLUSTER_RES_NAME: "${CLUSTER_RES_NAME}"
 
 # comment out when performing local testing
