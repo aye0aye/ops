@@ -15,6 +15,7 @@ resources:
       sourceName: "aye0aye/ops"
       branch: master
 
+# Slack room notification
   - name: slack_not
     type: notification
     integration: demo_slack
