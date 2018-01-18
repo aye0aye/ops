@@ -1,8 +1,0 @@
-aws_access_key_id = "${AWS_CREDS_INTEGRATION_ACCESSKEY}"
-aws_secret_access_key = "${AWS_CREDS_INTEGRATION_SECRETKEY}"
-region = "${EC2_REGION}"
-prod_vpc_id = "${PROD_VPC_ID}"
-prod_public_sn_01_id = "${PROD_PUBLIC_SN_O1_ID}"
-prod_public_sn_02_id = "${PROD_PUBLIC_SN_O2_ID}"
-prod_public_sg_id = "${PROD_PUBLIC_SG_ID}"
-ami_id = "${AMI_SEC_APPROVED_VERSIONNAME}"
