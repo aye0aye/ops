@@ -5,6 +5,8 @@
 resources:
 #################################################################
 ## Shared resources
+##################################################################
+
 # Automation scripts repo
   - name: infra_repo
     type: gitRepo
@@ -15,6 +17,8 @@ resources:
 
 ##################################################################
 #### AWS Provisioning Resources
+##################################################################
+
 # TEST AWS cluster
   - name: test_env_ecs
     type: cluster
@@ -76,6 +80,36 @@ resources:
         EC2_INSTANCE_TYPE: "t2.micro"
         ECS_CLUSTER_NAME: "prod_env_demo"
         ENVIRONMENT: "prod"
+
+##################################################################
+#### Prod application params
+##################################################################
+
+# PROD Docker Image Options
+  - name: prod_img_opts_app
+    type: dockerOptions
+    version:
+      memory: 64
+      cpuShares: 128
+      portMappings:
+        - 0:80
+      labels:
+        app: app
+        env: prod
+
+# PROD env vars
+  - name: prod_params_app
+    type: params
+    version:
+      params:
+        ENVIRONMENT: "PROD"
+        PORT: 80
+
+# PROD replicas
+  - name: prod_replicas_app
+    type: replicas
+    version:
+      count: 2
 
 ##################################################################
 #### Kubernetes cluster on AWS resources
@@ -149,14 +183,6 @@ resources:
 #      namespace: devops-samples
 #      region: us-central1-b
 #
-
-## PROD replicas
-#  - name: e2eshipdemo-replicas-ecs-prod
-#    type: replicas
-#    version:
-#      count: 2
-#    flags:
-#      - e2eShippableDemo
 
 
 #---------------------------------------------------------------#
@@ -307,6 +333,27 @@ jobs:
     flags:
       - e2e_demo_app
 
+# PROD deployment to Amazon ECS
+  - name: deploy_prod_app
+    type: deploy
+    steps:
+#      - IN: e2eshipdemo-release-ecs-prod
+#        switch: off
+      - IN: prod_params_app
+      - IN: prod_img_opts_app
+      - IN: prod_replicas_app
+      - IN: prod_env_ecs
+#      - IN: e2eshipdemo-alb-prod
+#        applyTo:
+#          - manifest: e2eshipdemo-manifest-ecs
+#            image: e2eshipdemo-img-ecs
+#            port: 80
+      - TASK: managed
+        # deployMethod: replace
+    flags:
+      - e2eShippableDemo
+      - ecs
+
 #
 ## Provision Kubernetes cluster with KOPS
 #  - name: prov_kube_cluster
@@ -404,27 +451,4 @@ jobs:
 #    flags:
 #      - e2eShippableDemo
 #      - kubernetes
-
-
-#
-## PROD deployment to Amazon ECS
-#  - name: e2eshipdemo-deploy-ecs-prod
-#    type: deploy
-#    steps:
-#      - IN: e2eshipdemo-release-ecs-prod
-#        switch: off
-#      - IN: e2eshipdemo-params-ecs-prod
-#      - IN: e2eshipdemo-img-options-ecs-prod
-#      - IN: e2eshipdemo-replicas-ecs-prod
-#      - IN: e2eshipdemo-cluster-ecs-prod
-#      - IN: e2eshipdemo-alb-prod
-#        applyTo:
-#          - manifest: e2eshipdemo-manifest-ecs
-#            image: e2eshipdemo-img-ecs
-#            port: 80
-#      - TASK: managed
-#        # deployMethod: replace
-#    flags:
-#      - e2eShippableDemo
-#      - ecs
 #
