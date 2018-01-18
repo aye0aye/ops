@@ -35,7 +35,7 @@ resources:
 #      method: application
 
 # TEST environment config
-  - name: test_params_ansible
+  - name: test_env_conf_ans
     type: params
     versionTemplate:
       params:
@@ -194,7 +194,7 @@ resources:
 
 jobs:
 # Provision TEST VMs and ECS cluster with Ansible
-  - name: prov_test_ansible
+  - name: prov_test_env_ans
     type: runSh
     dependencyMode: strict
     triggerMode: parallel
@@ -202,7 +202,7 @@ jobs:
       - IN: ami_secops_approved
       - IN: demo_aws_cli
         switch: off
-      - IN: test_params_ansible
+      - IN: test_env_conf_ans
         switch: off
       - IN: demo_aws_pem
         switch: off
@@ -226,16 +226,16 @@ jobs:
       - e2e_demo_app
 
 # Deprovision TEST VMs and ECS cluster
-  - name: deprov_test_ansible
+  - name: deprov_test_env_ans
     type: runSh
     steps:
       # - IN: auto_bvt
       #   switch: off
-      - IN: prov_test_ansible
+      - IN: prov_test_env_ans
         switch: off
       - IN: demo_aws_cli
         switch: off
-      - IN: test_params_ansible
+      - IN: test_env_conf_ans
         switch: off
       - IN: test_vpc_info
         switch: off
