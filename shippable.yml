@@ -5,7 +5,6 @@
 resources:
 #################################################################
 ## Shared resources
-
 # Automation scripts repo
   - name: infra_repo
     type: gitRepo
@@ -16,7 +15,6 @@ resources:
 
 ##################################################################
 #### AWS Provisioning Resources
-
 # TEST AWS cluster
   - name: test_env_ecs
     type: cluster
@@ -43,13 +41,42 @@ resources:
         EC2_TAG_TYPE: "ecs_container_instance"
         VPC_KEYPAIR_NAME: "demo_us_east_1"
         ECS_AMI: "ami-ba722dc0"
-        EC2_VOLUME_SIZE: 30
         EC2_COUNT: 2
         EC2_INSTANCE_TYPE: "t2.micro"
         ECS_CLUSTER_NAME: "test_env_demo"
         ENVIRONMENT: "test"
 
-#
+# PROD AWS cluster
+  - name: prod_env_ecs
+    type: cluster
+    integration: demo_aws # replace with your AWS integration name
+    versionTemplate:
+      # replace with your Amazon ECS cluster name and region
+      sourceName : ${CLUSTER_NAME}
+      region: ${REGION}
+
+## PROD AWS ALB target group
+#  - name: prod_alb     #required
+#    type: loadBalancer #required
+#    versionTemplate:
+#      # replace with the ARN for your Amazon EC/2 Application Load Balancer Target Group
+#      sourceName: "arn:aws:elasticloadbalancing:us-east-1:679404489841:targetgroup/ecs-test-tg/bc20de1be2dab77d"
+#      method: application
+
+# PROD environment config
+  - name: prod_env_conf_ans
+    type: params
+    versionTemplate:
+      params:
+        EC2_TAG_ROLE: "prod_env_demo"
+        EC2_TAG_TYPE: "ecs_container_instance"
+        VPC_KEYPAIR_NAME: "demo_us_east_1"
+        ECS_AMI: "ami-ba722dc0"
+        EC2_COUNT: 2
+        EC2_INSTANCE_TYPE: "t2.micro"
+        ECS_CLUSTER_NAME: "prod_env_demo"
+        ENVIRONMENT: "prod"
+
 ##################################################################
 #### Kubernetes cluster on AWS resources
 #
@@ -123,62 +150,6 @@ resources:
 #      region: us-central1-b
 #
 
-#
-### PROD resources
-#
-## Terraform STATE for PROD
-#  - name: prod_tf_state
-#    type: state
-#    flags:
-#      - e2eShippableDemo
-#
-## PROD environment config
-#  - name: prod_tf_config
-#    type: params
-#    version:
-#      params:
-#        EC2_REGION: "us-east-1"
-#        EC2_TAG_ROLE: "ecs-shippable-aye0aye-prod"
-#        EC2_TAG_TYPE: "ecs-container-instance"
-#        EC2_VOLUME_SIZE: 30
-#        EC2_COUNT: 2
-#        # TF_STATE_FILE: "prod_tf_state"
-#        STATE_RES_NAME: "prod_tf_info"
-#        ECS_CLUSTER_NAME: "e2eshipdemo-cluster-ecs-prod"
-#        ENVIRONMENT: "prod"
-#    flags:
-#      - e2eShippableDemo
-#
-## Output of TEST environment provisioning
-#  - name: prod_tf_info
-#    type: params
-#    version:
-#      params:
-#        SEED: "initial_version"
-#    flags:
-#      - e2eShippableDemo
-#
-## PROD env - ECS cluster
-#  - name: e2eshipdemo-cluster-ecs-prod
-#    type: cluster
-#    integration: dr-aws # replace with your AWS integration name
-#    pointer:
-#      # replace with your Amazon ECS cluster name and region
-#      sourceName : "e2eshipdemo-cluster-ecs-prod"
-#      region: "us-east-1"
-#    flags:
-#      - e2eShippableDemo
-#
-## PROD AWS ALB target group
-#  - name: e2eshipdemo-alb-prod     #required
-#    type: loadBalancer      #required
-#    pointer:
-#      # replace with the ARN for your Amazon EC/2 Application Load Balancer Target Group
-#      sourceName: "arn:aws:elasticloadbalancing:us-east-1:679404489841:targetgroup/ecs-prod-tg/e71fc83fd6600421"
-#      method: application
-#    flags:
-#      - e2eShippableDemo
-#
 ## PROD replicas
 #  - name: e2eshipdemo-replicas-ecs-prod
 #    type: replicas
@@ -191,7 +162,6 @@ resources:
 #---------------------------------------------------------------#
 #--------------------------- Ops Jobs --------------------------#
 #---------------------------------------------------------------#
-
 jobs:
 # Provision TEST VMs and ECS cluster with Ansible
   - name: prov_test_env_ans
@@ -253,10 +223,74 @@ jobs:
             - export CLUSTER_RES_NAME="test_env_ecs"
             - export AMI_ID=$(shipctl get_resource_version_name ami_secops_approved)
             - shipctl replace ansible.cfg group_vars/ecs-cluster-vars.yml
-            - cat inventory/base
             - ansible-playbook -v ansible-ecs-terminate.yml
             - popd
       - OUT: test_env_ecs
+        overwrite: true
+    flags:
+      - e2e_demo_app
+
+# Provision PROD VMs and ECS cluster with Ansible
+  - name: prov_prod_env_ans
+    type: runSh
+    dependencyMode: strict
+    triggerMode: parallel
+    steps:
+      - IN: ami_secops_approved
+      - IN: demo_aws_cli
+        switch: off
+      - IN: prod_env_conf_ans
+        switch: off
+      - IN: demo_aws_pem
+        switch: off
+      - IN: prod_vpc_info
+        switch: off
+      - IN: infra_repo
+        switch: off
+      - TASK:
+          script:
+            - sudo pip install boto3
+            - pushd $(shipctl get_resource_state "infra_repo")
+            - cd ./infra/provision-ecs-ansible
+            - export CLUSTER_RES_NAME="prod_env_ecs"
+            - export AMI_ID=$(shipctl get_resource_version_name ami_secops_approved)
+            - shipctl replace ansible.cfg ./group_vars/ecs-cluster-vars.yml
+            - ansible-playbook -v ansible-ecs-provision.yml
+            - popd
+      - OUT: prod_env_ecs
+        overwrite: true
+    flags:
+      - e2e_demo_app
+
+# Deprovision PROD VMs and ECS cluster
+  - name: deprov_prod_env_ans
+    type: runSh
+    steps:
+      - IN: prov_prod_env_ans
+        switch: off
+      - IN: demo_aws_cli
+        switch: off
+      - IN: prod_env_conf_ans
+        switch: off
+      - IN: prod_vpc_info
+        switch: off
+      - IN: demo_aws_pem
+        switch: off
+      - IN: infra_repo
+        switch: off
+      - IN: ami_secops_approved
+        switch: off
+      - TASK:
+          script:
+            - sudo pip install boto3
+            - pushd $(shipctl get_resource_state "infra_repo")
+            - cd ./infra/provision-ecs-ansible
+            - export CLUSTER_RES_NAME="prod_env_ecs"
+            - export AMI_ID=$(shipctl get_resource_version_name ami_secops_approved)
+            - shipctl replace ansible.cfg group_vars/ecs-cluster-vars.yml
+            - ansible-playbook -v ansible-ecs-terminate.yml
+            - popd
+      - OUT: prod_env_ecs
         overwrite: true
     flags:
       - e2e_demo_app
@@ -361,46 +395,6 @@ jobs:
 
 
 #
-## Provision PROD VMs with Terraform
-#  - name: prov_ecs_prod
-#    type: runSh
-#    steps:
-#      - IN: prod_tf_state
-#      - IN: ami_sec_approved
-#      - IN: prod_vpc_conf
-#        switch: off
-#      - IN: aws_pem
-#        switch: off
-#      - IN: aws_creds
-#        switch: off
-#      - IN: ops_repo
-#        switch: off
-#      - TASK:
-#        - script: shipctl copy_resource_file_from_state prod_tf_state terraform.tfstate .
-#        - script: shipctl replace $OPS_REPO_STATE/infra/awsProdECS/terraform.tfvars
-#        - script: |
-#            terraform plan
-#            terraform apply
-#        - script: |
-#            shipctl put_resource_state prod_tf_info PROD_ECS_INS_0_IP $(terraform output prod_ecs_ins_0_ip)
-#            shipctl put_resource_state prod_tf_info PROD_ECS_INS_1_IP $(terraform output prod_ecs_ins_1_ip)
-#            shipctl put_resource_state prod_tf_info PROD_ECS_INS_2_IP $(terraform output prod_ecs_ins_2_ip)
-#            shipctl put_resource_state prod_tf_info PROD_ECS_CLUSTER_ID $(terraform output prod_ecs_cluster_id)
-#            shipctl put_resource_state prod_tf_info $(terraform output REGION $REGION)
-#        - script: shipctl refresh_file_to_out_path terraform.tfstate prod_tf_state
-#      - OUT: e2eshipdemo-cluster-ecs-prod
-#      - OUT: prod_tf_info
-#      - OUT: prod_tf_state
-#    on_success:
-#      - script: echo "SUCCESS"
-#    on_failure:
-#      - script: echo "FAILURE"
-#    always:
-#      - script: . /build/IN/ops_repo/gitRepo/infra/shipUtil.sh && . /build/IN/ops_repo/gitRepo/infra/archiveState.sh infra/awsProdECS prod_tf_state
-#    flags:
-#      - e2eShippableDemo
-#      - ecs
-#
 ## PROD deployment to Amazon ECS
 #  - name: e2eshipdemo-deploy-ecs-prod
 #    type: deploy
@@ -418,36 +412,6 @@ jobs:
 #            port: 80
 #      - TASK: managed
 #        # deployMethod: replace
-#    flags:
-#      - e2eShippableDemo
-#      - ecs
-#
-
-## Deprovision PROD VMs and ECS cluster
-#  - name: de_prov_ecs_prod
-#    type: runSh
-#    steps:
-#      - IN: prov_ecs_prod
-#        switch: off
-#      - IN: prod_tf_state
-#      - IN: prod_vpc_conf
-#        switch: off
-#      - IN: aws_creds
-#        switch: off
-#      - IN: ops_repo
-#        switch: off
-#      - IN: ami_sec_approved
-#        switch: off
-#      - TASK:
-#        - script: . /build/IN/ops_repo/gitRepo/infra/shipUtil.sh
-#        - script: . /build/IN/ops_repo/gitRepo/infra/awsProdECS/provProdInfra.sh destroy
-#      - OUT: prod_tf_state
-#    on_success:
-#      - script: echo "SUCCESS"
-#    on_failure:
-#      - script: echo "FAILURE"
-#    always:
-#      - script: . /build/IN/ops_repo/gitRepo/infra/shipUtil.sh && . /build/IN/ops_repo/gitRepo/infra/archiveState.sh infra/awsProdECS prod_tf_state
 #    flags:
 #      - e2eShippableDemo
 #      - ecs
