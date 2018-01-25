@@ -393,7 +393,7 @@ jobs:
             - uname -a
             - sleep 3
             - aws --version || true
-            - az --help
+            - az --version > /dev/null
 #            - exit 1
             - sleep 10
 
