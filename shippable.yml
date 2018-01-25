@@ -393,7 +393,9 @@ jobs:
             - uname -a
             - sleep 3
             - aws --version || true
-            - az --version > /dev/null
+            - wget google.com
+            - cat index.html
+#            - az --version > /dev/null
 #            - exit 1
             - sleep 10
 
