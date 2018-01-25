@@ -380,6 +380,7 @@ jobs:
   - name: test_avi
     type: runSh
     steps:
+      - IN: demo_aws_cli
       - TASK:
           runtime:
             container: true
@@ -391,7 +392,8 @@ jobs:
           script:
             - uname -a
             - sleep 3
-            - az --version || true
+#            - az --version || true
+            - aws --version || true
             - sleep 10
 
 
