@@ -393,7 +393,7 @@ jobs:
             - uname -a
             - sleep 3
             - aws --version || true
-            - wget google.com
+            - wget microsft.com
             - cat index.html
 #            - az --version > /dev/null
 #            - exit 1
