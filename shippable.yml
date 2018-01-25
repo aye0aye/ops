@@ -475,20 +475,20 @@ jobs:
 #      - kubernetes
 #
 
-name: test_avi
-type: runSh
-steps:
+  - name: test_avi
+    type: runSh
+    steps:
 #  - IN: test-azure-cli
-  - TASK:
-      runtime:
+      - TASK:
+        runtime:
         container: true
         options:
           imageName: drydock/microbase
           imageTag: v6.1.3
           pull: true
-      name: test-azure-cli-vm-list
-      script:
-        - uname -a
-        - sleep 3
-        - az --version || true
-        - sleep 10
+        name: test-azure-cli-vm-list
+        script:
+          - uname -a
+          - sleep 3
+          - az --version || true
+          - sleep 10
