@@ -376,29 +376,6 @@ jobs:
       - e2eShippableDemo
       - ecs
 
-
-  - name: test_avi
-    type: runSh
-    steps:
-#      - IN: demo_aws_cli
-      - TASK:
-          runtime:
-            container: true
-            options:
-              imageName: drydock/u16
-              imageTag: v5.10.4
-              pull: true
-          name: test-azure-cli-vm-list
-          script:
-            - uname -a
-            - sleep 3
-            - aws --version || true
-            - wget microsft.com
-            - cat index.html
-#            - az --version > /dev/null
-#            - exit 1
-            - sleep 10
-
 #
 ## Provision Kubernetes cluster with KOPS
 #  - name: prov_kube_cluster
