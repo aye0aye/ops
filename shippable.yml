@@ -236,7 +236,7 @@ jobs:
   - name: deprov_test_env_ans
     type: runSh
     steps:
-       - IN: auto_bvt
+      - IN: auto_bvt
 #         switch: off
 #      - IN: prov_test_env_ans
 #        switch: off
