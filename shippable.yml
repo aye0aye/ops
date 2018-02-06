@@ -236,10 +236,10 @@ jobs:
   - name: deprov_test_env_ans
     type: runSh
     steps:
-      # - IN: auto_bvt
-      #   switch: off
-      - IN: prov_test_env_ans
-        switch: off
+       - IN: auto_bvt
+#         switch: off
+#      - IN: prov_test_env_ans
+#        switch: off
       - IN: demo_aws_cli
         switch: off
       - IN: test_env_conf_ans
@@ -346,7 +346,7 @@ jobs:
     type: release
     steps:
       - IN: auto_bvt
-        switch: off
+#        switch: off
       - IN: deploy_test_app
         switch: off
       - TASK: managed
