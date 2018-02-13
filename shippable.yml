@@ -247,7 +247,7 @@ jobs:
     type: runSh
     steps:
       - IN: auto_bvt
-#         switch: off
+         switch: off
 #      - IN: prov_test_env_ans
 #        switch: off
       - IN: demo_aws_cli
