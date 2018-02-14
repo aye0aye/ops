@@ -240,7 +240,7 @@ jobs:
       - OUT: test_env_ecs
         overwrite: true
     flags:
-      - e2e_demo_app
+      - prov
 
 # Deprovision TEST VMs and ECS cluster
   - name: deprov_test_env_ans
@@ -278,7 +278,7 @@ jobs:
 #      - OUT: test_env_ecs
 #        overwrite: true
     flags:
-      - e2e_demo_app
+      - prov
 
 # Provision PROD VMs and ECS cluster with Ansible
   - name: prov_prod_env_ans
@@ -313,7 +313,7 @@ jobs:
       - OUT: prod_env_ecs
         overwrite: true
     flags:
-      - e2e_demo_app
+      - prov
 
 # Deprovision PROD VMs and ECS cluster
   - name: deprov_prod_env_ans
@@ -349,14 +349,14 @@ jobs:
 #      - OUT: prod_env_ecs
 #        overwrite: true
     flags:
-      - e2e_demo_app
+      - prov
 
 # Create PROD Release
   - name: release_prod
     type: release
     steps:
       - IN: auto_bvt
-#        switch: off
+        switch: off
       - IN: deploy_test_app
         switch: off
       - TASK: managed
@@ -364,7 +364,8 @@ jobs:
     notify:
       - on_success: slack_not
     flags:
-      - e2e_demo_app
+      - prod
+      - ara
 
 # PROD deployment to Amazon ECS
   - name: deploy_prod_app
@@ -383,7 +384,7 @@ jobs:
       - TASK: managed
         # deployMethod: replace
     flags:
-      - e2eShippableDemo
+      - prod
       - ecs
 
 #
