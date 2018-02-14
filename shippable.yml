@@ -29,7 +29,7 @@ resources:
         app: "prod_be"
 
 # BE Prod Internal load-balancer
-  - name: prod_be_lb
+  - name: gke_prod_be_lb
     type: loadBalancer
     integration: demo_gke
     pointer:
@@ -54,7 +54,7 @@ resources:
         app: "prod_fe"
 
 # FE External load-balancer
-  - name: prod_fe_lb
+  - name: gke_prod_fe_lb
     type: loadBalancer
     integration: demo_gke
     pointer:
@@ -78,34 +78,44 @@ resources:
         REDIS: "prod-be-lb"
 
 ##################################################################
-#### Prod application params
+#### Application Release Automation Resources
 ##################################################################
 
-# PROD Docker Image Options
-  - name: prod_img_opts_app
-    type: dockerOptions
-    version:
-      memory: 64
-      cpuShares: 128
-      portMappings:
-        - 0:80
-      labels:
-        app: app
-        env: prod
+# Set app version seed
+  - name: seed_version_app
+    type: version
+    versionTemplate:
+      versionName: "1.0.0"
 
-# PROD env vars
-  - name: prod_params_app
-    type: params
-    version:
-      params:
-        ENVIRONMENT: "PROD"
-        PORT: 80
-
-# PROD replicas
-  - name: prod_replicas_app
-    type: replicas
-    version:
-      count: 2
+###################################################################
+##### Prod application params
+###################################################################
+#
+## PROD Docker Image Options
+#  - name: prod_img_opts_app
+#    type: dockerOptions
+#    version:
+#      memory: 64
+#      cpuShares: 128
+#      portMappings:
+#        - 0:80
+#      labels:
+#        app: app
+#        env: prod
+#
+## PROD env vars
+#  - name: prod_params_app
+#    type: params
+#    version:
+#      params:
+#        ENVIRONMENT: "PROD"
+#        PORT: 80
+#
+## PROD replicas
+#  - name: prod_replicas_app
+#    type: replicas
+#    version:
+#      count: 2
 
 
 #---------------------------------------------------------------#
@@ -121,18 +131,19 @@ jobs:
   - name: rel_gke_prod
     type: release
     steps:
+      - IN: seed_version_app
+        switch: off
       - IN: auto_bvt
         switch: off
       - IN: deployGKEAppTest
         switch: off
       - TASK: managed
-        bump: final
+        bump: minor
     notify:
       - on_success: slack_not
     flags:
-      - prod
-      - ara
       - gke
+      - cd
 
 # GKE PROD Env Deploy
   - name: deployGKEAppProd
@@ -154,57 +165,57 @@ jobs:
       - TASK: managed
     flags:
       - gke
-      - prod
+      - cd
 
 # GKE PROD LB Provision
-  - name: prov_prod_lb
+  - name: provGKEProdLB
     type: provision
     dependencyMode: strict
     steps:
-      - IN: prod_be_lb
-      - IN: prod_fe_lb
+      - IN: gke_prod_be_lb
+      - IN: gke_prod_fe_lb
       - IN: deployGKEAppProd
     flags:
       - gke
-      - prod
+      - cd
 
-##################################################################
-################### Release AWS ECS Prod
-##################################################################
-
-# Create PROD Release
-  - name: release_prod
-    type: release
-    steps:
-      - IN: auto_bvt
-        switch: off
-      - IN: deploy_test_app
-        switch: off
-      - TASK: managed
-        bump: final
-    notify:
-      - on_success: slack_not
-    flags:
-      - prod
-      - ara
-
-# PROD deployment to Amazon ECS
-  - name: deploy_prod_app
-    type: deploy
-    steps:
-      - IN: release_prod
-      - IN: prod_params_app
-      - IN: prod_img_opts_app
-      - IN: prod_replicas_app
-      - IN: prod_env_ecs
-#      - IN: e2eshipdemo-alb-prod
-#        applyTo:
-#          - manifest: e2eshipdemo-manifest-ecs
-#            image: e2eshipdemo-img-ecs
-#            port: 80
-      - TASK: managed
-        # deployMethod: replace
-    flags:
-      - prod
-      - ecs
-
+###################################################################
+#################### Release AWS ECS Prod
+###################################################################
+#
+## Create PROD Release
+#  - name: release_prod
+#    type: release
+#    steps:
+#      - IN: auto_bvt
+#        switch: off
+#      - IN: deploy_test_app
+#        switch: off
+#      - TASK: managed
+#        bump: final
+#    notify:
+#      - on_success: slack_not
+#    flags:
+#      - prod
+#      - ara
+#
+## PROD deployment to Amazon ECS
+#  - name: deploy_prod_app
+#    type: deploy
+#    steps:
+#      - IN: release_prod
+#      - IN: prod_params_app
+#      - IN: prod_img_opts_app
+#      - IN: prod_replicas_app
+#      - IN: prod_env_ecs
+##      - IN: e2eshipdemo-alb-prod
+##        applyTo:
+##          - manifest: e2eshipdemo-manifest-ecs
+##            image: e2eshipdemo-img-ecs
+##            port: 80
+#      - TASK: managed
+#        # deployMethod: replace
+#    flags:
+#      - prod
+#      - ecs
+#
