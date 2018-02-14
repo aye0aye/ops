@@ -312,7 +312,7 @@ jobs:
       - prod
 
 # GKE PROD LB Provision
-  - name: prov_test_lb
+  - name: prov_prod_lb
     type: provision
     dependencyMode: strict
     steps:
@@ -321,7 +321,7 @@ jobs:
       - IN: deployGKEAppProd
     flags:
       - gke
-      - test
+      - prod
 
 ##################################################################
 ################### Provision  ECS Jobs
