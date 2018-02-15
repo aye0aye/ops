@@ -18,64 +18,64 @@ resources:
 ##################################################################
 #### GKE App Prod Resources
 ##################################################################
-
-# BE Prod Container Options
-  - name: prod_be_options
-    type: dockerOptions
-    version:
-      memory: 256
-      cpu: 256
-      labels:
-        app: "prod_be"
-
-# BE Prod Internal load-balancer
-  - name: gke_prod_be_lb
-    type: loadBalancer
-    integration: demo_gke
-    pointer:
-      sourceName: "prod-be-lb"
-      method: ClusterIP
-      clusterName: "cluster"
-      region: "us-west1-a"
-    version:
-      ports:
-        - name: testport
-          protocol: TCP
-          port: 6379
-      selector:
-        app: "prod_be"
-
-# FE Prod Container Options
-  - name: prod_fe_options
-    type: dockerOptions
-    version:
-      cpu: 512
-      labels:
-        app: "prod_fe"
-
-# FE External load-balancer
-  - name: gke_prod_fe_lb
-    type: loadBalancer
-    integration: demo_gke
-    pointer:
-      sourceName: "prod-fe-lb"
-      method: LoadBalancer
-      clusterName: "cluster"
-      region: "us-west1-a"
-    version:
-      ports:
-        - name: testpor
-          protocol: TCP
-          port: 80
-      selector:
-        app: "prod_fe"
-
-# FE Prod Env Vars
-  - name: prod_fe_params
-    type: params
-    version:
-      params:
-        REDIS: "prod-be-lb"
+#
+## BE Prod Container Options
+#  - name: prod_be_options
+#    type: dockerOptions
+#    version:
+#      memory: 256
+#      cpu: 256
+#      labels:
+#        app: "prod_be"
+#
+## BE Prod Internal load-balancer
+#  - name: gke_prod_be_lb
+#    type: loadBalancer
+#    integration: demo_gke
+#    pointer:
+#      sourceName: "prod-be-lb"
+#      method: ClusterIP
+#      clusterName: "cluster"
+#      region: "us-west1-a"
+#    version:
+#      ports:
+#        - name: testport
+#          protocol: TCP
+#          port: 6379
+#      selector:
+#        app: "prod_be"
+#
+## FE Prod Container Options
+#  - name: prod_fe_options
+#    type: dockerOptions
+#    version:
+#      cpu: 512
+#      labels:
+#        app: "prod_fe"
+#
+## FE External load-balancer
+#  - name: gke_prod_fe_lb
+#    type: loadBalancer
+#    integration: demo_gke
+#    pointer:
+#      sourceName: "prod-fe-lb"
+#      method: LoadBalancer
+#      clusterName: "cluster"
+#      region: "us-west1-a"
+#    version:
+#      ports:
+#        - name: testport
+#          protocol: TCP
+#          port: 80
+#      selector:
+#        app: "prod_fe"
+#
+## FE Prod Env Vars
+#  - name: prod_fe_params
+#    type: params
+#    version:
+#      params:
+#        REDIS: "prod-be-lb"
 
 ##################################################################
 #### Application Release Automation Resources
@@ -127,57 +127,57 @@ jobs:
 ################### Google Cloud Kubernetes Jobs
 ##################################################################
 
-# Create GKE PROD Release
-  - name: rel_gke_prod
-    type: release
-    steps:
-      - IN: seed_version_app
-        switch: off
-      - IN: auto_bvt
-        switch: off
-      - IN: deployGKEAppTest
-        switch: off
-      - TASK: managed
-        bump: minor
-    notify:
-      - on_success: slack_not
-    flags:
-      - gke
-      - cd
-
-# GKE PROD Env Deploy
-  - name: deployGKEAppProd
-    type: deploy
-    method: replace
-    dependencyMode: strict
-    steps:
-      - IN: rel_gke_prod
-      - IN: gke_cluster
-      - IN: prod_fe_params
-        applyTo:
-          - appFETemp
-      - IN: prod_fe_options
-        applyTo:
-          - appFETemp
-      - IN: prod_be_options
-        applyTo:
-          - appBETemp
-      - TASK: managed
-    flags:
-      - gke
-      - cd
-
-# GKE PROD LB Provision
-  - name: provGKEProdLB
-    type: provision
-    dependencyMode: strict
-    steps:
-      - IN: gke_prod_be_lb
-      - IN: gke_prod_fe_lb
-      - IN: deployGKEAppProd
-    flags:
-      - gke
-      - cd
+## Create GKE PROD Release
+#  - name: rel_gke_prod
+#    type: release
+#    steps:
+#      - IN: seed_version_app
+#        switch: off
+#      - IN: auto_bvt
+#        switch: off
+#      - IN: deployGKEAppTest
+#        switch: off
+#      - TASK: managed
+#        bump: minor
+#    notify:
+#      - on_success: slack_not
+#    flags:
+#      - gke
+#      - cd
+#
+## GKE PROD Env Deploy
+#  - name: deployGKEAppProd
+#    type: deploy
+#    method: replace
+#    dependencyMode: strict
+#    steps:
+#      - IN: rel_gke_prod
+#      - IN: gke_cluster
+#      - IN: prod_fe_params
+#        applyTo:
+#          - appFETemp
+#      - IN: prod_fe_options
+#        applyTo:
+#          - appFETemp
+#      - IN: prod_be_options
+#        applyTo:
+#          - appBETemp
+#      - TASK: managed
+#    flags:
+#      - gke
+#      - cd
+#
+## GKE PROD LB Provision
+#  - name: provGKEProdLB
+#    type: provision
+#    dependencyMode: strict
+#    steps:
+#      - IN: gke_prod_be_lb
+#      - IN: gke_prod_fe_lb
+#      - IN: deployGKEAppProd
+#    flags:
+#      - gke
+#      - cd
 
 ###################################################################
 #################### Release AWS ECS Prod
