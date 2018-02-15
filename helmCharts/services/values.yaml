@@ -1,0 +1,10 @@
+environment: ${ENVIRONMENT}
+appVersion: ${APP_VERSION}
+
+be:
+  label: ${BE_LABEL}
+  port: 6379
+
+fe:
+  label: ${FE_LABEL}
+  port: 80

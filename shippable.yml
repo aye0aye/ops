@@ -16,7 +16,7 @@ resources:
         - "#demo"
 
 # REPO of BVT Automation scripts
-  - name: helm_repo
+  - name: ops_repo
     type: gitRepo
     integration: "demo_github"
     versionTemplate:
@@ -53,6 +53,214 @@ resources:
       sourceName: "aye0aye/dh_img_app_fe" # replace with your Hub URL
       isPull: false
       versionName: latest
+
+#---------------------------------------------------------------#
+#--------------------------- Ops Jobs --------------------------#
+#---------------------------------------------------------------#
+jobs:
+
+##################################################################
+################### Production Release Job
+##################################################################
+
+# Create Helm PROD Release
+  - name: rel_helm_prod
+    type: release
+    steps:
+      - IN: seed_version_app
+        switch: off
+      - IN: auto_bvt
+        switch: off
+      - IN: validated_be_img
+        switch: off
+      - IN: validated_fe_img
+        switch: off
+      - TASK: managed
+        bump: minor
+      - OUT: released_be_img
+        replicate: validated_be_img
+      - OUT: released_fe_img
+        replicate: validated_fe_img
+    notify:
+      - on_success: slack_not
+    flags:
+      - gke
+      - cd
+
+##################################################################
+#### GKE App PROD Helm Jobs
+##################################################################
+# Test Deploy app with helm
+  - name: deployGKEProdAppHelm
+    type: runSh
+    dependencyMode: strict
+    steps:
+      - IN: gcloud_cli
+      - IN: rel_helm_prod
+      - IN: released_be_img
+      - IN: released_fe_img
+      - IN: gke_cluster
+      - IN: ops_repo
+        switch: off
+      - TASK:
+          runtime:
+            options:
+              env:
+                - ENVIRONMENT: "prod"
+                - TOOLSET: "helm"
+          script:
+            - pushd $(shipctl get_resource_state "ops_repo")
+            - export CLUST=$(shipctl get_resource_version_key gke_cluster sourceName)
+            - export CLUST_REG=$(shipctl get_resource_version_key gke_cluster region)
+            - gcloud container clusters get-credentials $CLUST --zone $CLUST_REG
+            - which helm
+            - helm init
+            - cd helmCharts
+            - export FE_LABEL=$TOOLSET"-fe-"$ENVIRONMENT
+            - export BE_LABEL=$TOOLSET"-be-"$ENVIRONMENT
+            - export APP_VERSION=$(shipctl get_resource_version_name rel_helm_prod)
+            - export BE_IMG=$(shipctl get_resource_version_key released_be_img sourceName)
+            - export BE_TAG=$(shipctl get_resource_version_name released_be_img)
+            - export FE_IMG=$(shipctl get_resource_version_key released_fe_img sourceName)
+            - export FE_TAG=$(shipctl get_resource_version_name released_fe_img)
+            - shipctl replace ./deploys/values.yaml
+            - helm upgrade --install $APP_VERSION ./deploys
+            - popd
+    flags:
+      - gke
+      - cd
+
+# Test Deploy LB with helm
+  - name: deployGKEProdLBHelm
+    type: runSh
+    dependencyMode: strict
+    steps:
+      - IN: deployGKEProdAppHelm
+      - IN: gcloud_cli
+        switch: off
+      - IN: gke_cluster
+        switch: off
+      - IN: ops_repo
+        switch: off
+      - TASK:
+          runtime:
+            options:
+              env:
+                - ENVIRONMENT: "prod"
+                - TOOLSET: "helm"
+          script:
+            - pushd $(shipctl get_resource_state "ops_repo")
+            - export CLUST=$(shipctl get_resource_version_key gke_cluster sourceName)
+            - export CLUST_REG=$(shipctl get_resource_version_key gke_cluster region)
+            - gcloud container clusters get-credentials $CLUST --zone $CLUST_REG
+            - which helm
+            - helm init
+            - cd helmCharts
+            - export FE_LABEL=$TOOLSET"-fe-"$ENVIRONMENT
+            - export BE_LABEL=$TOOLSET"-be-"$ENVIRONMENT
+            - export APP_VERSION=latest
+            - shipctl replace ./services/values.yaml
+            - helm upgrade --install $APP_VERSION ./services
+            - popd
+    flags:
+      - gke
+      - cd
+
+
+
+
+
+
+
+
+
+
+
+##################################################################
+################### Google Cloud Kubernetes Jobs
+##################################################################
+
+
+## GKE PROD Env Deploy
+#  - name: deployGKEAppProd
+#    type: deploy
+#    method: replace
+#    dependencyMode: strict
+#    steps:
+#      - IN: rel_gke_prod
+#      - IN: gke_cluster
+#      - IN: prod_fe_params
+#        applyTo:
+#          - appFETemp
+#      - IN: prod_fe_options
+#        applyTo:
+#          - appFETemp
+#      - IN: prod_be_options
+#        applyTo:
+#          - appBETemp
+#      - TASK: managed
+#    flags:
+#      - gke
+#      - cd
+#
+## GKE PROD LB Provision
+#  - name: provGKEProdLB
+#    type: provision
+#    dependencyMode: strict
+#    steps:
+#      - IN: gke_prod_be_lb
+#      - IN: gke_prod_fe_lb
+#      - IN: deployGKEAppProd
+#    flags:
+#      - gke
+#      - cd
+
+###################################################################
+#################### Release AWS ECS Prod
+###################################################################
+#
+## Create PROD Release
+#  - name: release_prod
+#    type: release
+#    steps:
+#      - IN: auto_bvt
+#        switch: off
+#      - IN: deploy_test_app
+#        switch: off
+#      - TASK: managed
+#        bump: final
+#    notify:
+#      - on_success: slack_not
+#    flags:
+#      - prod
+#      - ara
+#
+## PROD deployment to Amazon ECS
+#  - name: deploy_prod_app
+#    type: deploy
+#    steps:
+#      - IN: release_prod
+#      - IN: prod_params_app
+#      - IN: prod_img_opts_app
+#      - IN: prod_replicas_app
+#      - IN: prod_env_ecs
+##      - IN: e2eshipdemo-alb-prod
+##        applyTo:
+##          - manifest: e2eshipdemo-manifest-ecs
+##            image: e2eshipdemo-img-ecs
+##            port: 80
+#      - TASK: managed
+#        # deployMethod: replace
+#    flags:
+#      - prod
+#      - ecs
+#
+
+
+
+
+
+
 
 ##################################################################
 #### GKE App Prod Resources
@@ -145,198 +353,3 @@ resources:
 #    type: replicas
 #    version:
 #      count: 2
-
-
-#---------------------------------------------------------------#
-#--------------------------- Ops Jobs --------------------------#
-#---------------------------------------------------------------#
-jobs:
-
-##################################################################
-################### Production Release Job
-##################################################################
-
-# Create Helm PROD Release
-  - name: rel_helm_prod
-    type: release
-    steps:
-      - IN: seed_version_app
-        switch: off
-      - IN: auto_bvt
-        switch: off
-      - IN: validated_be_img
-        switch: off
-      - IN: validated_fe_img
-        switch: off
-      - TASK: managed
-        bump: minor
-      - OUT: released_be_img
-        replicate: validated_be_img
-      - OUT: released_fe_img
-        replicate: validated_fe_img
-    notify:
-      - on_success: slack_not
-    flags:
-      - gke
-      - cd
-
-##################################################################
-#### GKE App PROD Helm Jobs
-##################################################################
-# Test Deploy app with helm
-  - name: deployGKEProdAppHelm
-    type: runSh
-    dependencyMode: strict
-    steps:
-      - IN: gcloud_cli
-      - IN: rel_helm_prod
-      - IN: released_be_img
-      - IN: released_fe_img
-      - IN: gke_cluster
-      - IN: helm_repo
-        switch: off
-      - TASK:
-          runtime:
-            options:
-              env:
-                - ENVIRONMENT: "prod"
-                - TOOLSET: "helm"
-          script:
-            - pushd $(shipctl get_resource_state "helm_repo")
-            - export CLUST=$(shipctl get_resource_version_key gke_cluster sourceName)
-            - export CLUST_REG=$(shipctl get_resource_version_key gke_cluster region)
-            - gcloud container clusters get-credentials $CLUST --zone $CLUST_REG
-            - which helm
-            - helm init
-            - cd helmCharts
-            - export FE_LABEL=$TOOLSET"-fe-"$ENVIRONMENT
-            - export BE_LABEL=$TOOLSET"-be-"$ENVIRONMENT
-            - export APP_VERSION=$(shipctl get_resource_version_name rel_helm_prod)
-            - export BE_IMG=$(shipctl get_resource_version_key released_be_img sourceName)
-            - export BE_TAG=$(shipctl get_resource_version_name released_be_img)
-            - export FE_IMG=$(shipctl get_resource_version_key released_fe_img sourceName)
-            - export FE_TAG=$(shipctl get_resource_version_name released_fe_img)
-            - shipctl replace ./deploys/values.yaml
-            - helm upgrade --install $APP_VERSION ./deploys
-            - popd
-    flags:
-      - gke
-      - cd
-
-# Test Deploy LB with helm
-  - name: deployGKEProdLBHelm
-    type: runSh
-    dependencyMode: strict
-    steps:
-      - IN: deployGKEProdAppHelm
-      - IN: gcloud_cli
-        switch: off
-      - IN: gke_cluster
-        switch: off
-      - IN: helm_repo
-        switch: off
-      - TASK:
-          runtime:
-            options:
-              env:
-                - ENVIRONMENT: "prod"
-                - TOOLSET: "helm"
-          script:
-            - pushd $(shipctl get_resource_state "helm_repo")
-            - export CLUST=$(shipctl get_resource_version_key gke_cluster sourceName)
-            - export CLUST_REG=$(shipctl get_resource_version_key gke_cluster region)
-            - gcloud container clusters get-credentials $CLUST --zone $CLUST_REG
-            - which helm
-            - helm init
-            - cd helmCharts
-            - export FE_LABEL=$TOOLSET"-fe-"$ENVIRONMENT
-            - export BE_LABEL=$TOOLSET"-be-"$ENVIRONMENT
-            - export APP_VERSION=latest
-            - shipctl replace ./services/values.yaml
-            - helm upgrade --install $APP_VERSION ./services
-            - popd
-    flags:
-      - gke
-      - cd
-
-
-
-##################################################################
-################### Google Cloud Kubernetes Jobs
-##################################################################
-
-
-## GKE PROD Env Deploy
-#  - name: deployGKEAppProd
-#    type: deploy
-#    method: replace
-#    dependencyMode: strict
-#    steps:
-#      - IN: rel_gke_prod
-#      - IN: gke_cluster
-#      - IN: prod_fe_params
-#        applyTo:
-#          - appFETemp
-#      - IN: prod_fe_options
-#        applyTo:
-#          - appFETemp
-#      - IN: prod_be_options
-#        applyTo:
-#          - appBETemp
-#      - TASK: managed
-#    flags:
-#      - gke
-#      - cd
-#
-## GKE PROD LB Provision
-#  - name: provGKEProdLB
-#    type: provision
-#    dependencyMode: strict
-#    steps:
-#      - IN: gke_prod_be_lb
-#      - IN: gke_prod_fe_lb
-#      - IN: deployGKEAppProd
-#    flags:
-#      - gke
-#      - cd
-
-###################################################################
-#################### Release AWS ECS Prod
-###################################################################
-#
-## Create PROD Release
-#  - name: release_prod
-#    type: release
-#    steps:
-#      - IN: auto_bvt
-#        switch: off
-#      - IN: deploy_test_app
-#        switch: off
-#      - TASK: managed
-#        bump: final
-#    notify:
-#      - on_success: slack_not
-#    flags:
-#      - prod
-#      - ara
-#
-## PROD deployment to Amazon ECS
-#  - name: deploy_prod_app
-#    type: deploy
-#    steps:
-#      - IN: release_prod
-#      - IN: prod_params_app
-#      - IN: prod_img_opts_app
-#      - IN: prod_replicas_app
-#      - IN: prod_env_ecs
-##      - IN: e2eshipdemo-alb-prod
-##        applyTo:
-##          - manifest: e2eshipdemo-manifest-ecs
-##            image: e2eshipdemo-img-ecs
-##            port: 80
-#      - TASK: managed
-#        # deployMethod: replace
-#    flags:
-#      - prod
-#      - ecs
-#

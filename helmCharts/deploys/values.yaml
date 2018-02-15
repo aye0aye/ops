@@ -1,0 +1,23 @@
+environment: ${ENVIRONMENT}
+appVersion: ${APP_VERSION}
+
+be:
+  label: ${BE_LABEL}
+  replicaCount: 1
+  image:
+    repo: ${BE_IMG}
+    tag: ${BE_TAG}
+  port: 6379
+
+fe:
+  label: ${FE_LABEL}
+  replicaCount: 1
+  image:
+    repo: ${FE_IMG}
+    tag: ${FE_TAG}
+  resources:
+    requests:
+      cpu: 250m
+    limits:
+      cpu: 500m
+  port: 80
