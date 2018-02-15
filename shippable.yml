@@ -26,6 +26,27 @@ resources:
       versionName: "1.0.0"
 
 ##################################################################
+#### Prod Released Apps
+##################################################################
+# Docker Image
+  - name: released_fe_img
+    type: image
+    integration: demo_dh # replace with your integration name
+    versionTemplate:
+      sourceName: "aye0aye/dh_img_app_fe" # replace with your Hub URL
+      isPull: false
+      versionName: latest
+
+# Docker Image
+  - name: release_be_img
+    type: image
+    integration: demo_dh # replace with your integration name
+    versionTemplate:
+      sourceName: "aye0aye/dh_img_app_fe" # replace with your Hub URL
+      isPull: false
+      versionName: latest
+
+##################################################################
 #### GKE App Prod Resources
 ##################################################################
 #
@@ -135,14 +156,21 @@ jobs:
         switch: off
       - IN: auto_bvt
         switch: off
+      - IN: validated_be_img
+        switch: off
+      - IN: validated_fe_img
+        switch: off
       - TASK: managed
         bump: minor
+      - OUT: released_be_img
+        replicate: validated_be_img
+      - OUT: released_fe_img
+        replicate: validated_fe_img
     notify:
       - on_success: slack_not
     flags:
       - gke
       - cd
-
 
 ##################################################################
 ################### Google Cloud Kubernetes Jobs
