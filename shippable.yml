@@ -63,108 +63,108 @@ jobs:
 ################### Production Release Job
 ##################################################################
 
-# Create Helm PROD Release
-  - name: rel_helm_prod
-    type: release
-    steps:
-      - IN: seed_version_app
-        switch: off
-      - IN: auto_bvt
-        switch: off
-      - IN: validated_be_img
-        switch: off
-      - IN: validated_fe_img
-        switch: off
-      - TASK: managed
-        bump: minor
-      - OUT: released_be_img
-        replicate: validated_be_img
-      - OUT: released_fe_img
-        replicate: validated_fe_img
-    notify:
-      - on_success: slack_not
-    flags:
-      - gke
-      - cd
-
-##################################################################
-#### GKE App PROD Helm Jobs
-##################################################################
-# Test Deploy app with helm
-  - name: deployGKEProdAppHelm
-    type: runSh
-    dependencyMode: strict
-    steps:
-      - IN: gcloud_cli
-      - IN: rel_helm_prod
-      - IN: released_be_img
-      - IN: released_fe_img
-      - IN: gke_cluster
-      - IN: ops_repo
-        switch: off
-      - TASK:
-          runtime:
-            options:
-              env:
-                - ENVIRONMENT: "prod"
-                - TOOLSET: "helm"
-          script:
-            - pushd $(shipctl get_resource_state "ops_repo")
-            - export CLUST=$(shipctl get_resource_version_key gke_cluster sourceName)
-            - export CLUST_REG=$(shipctl get_resource_version_key gke_cluster region)
-            - gcloud container clusters get-credentials $CLUST --zone $CLUST_REG
-            - which helm
-            - helm init
-            - cd helmCharts
-            - export FE_LABEL=$TOOLSET"-fe-"$ENVIRONMENT
-            - export BE_LABEL=$TOOLSET"-be-"$ENVIRONMENT
-            - export APP_VERSION=$(shipctl get_resource_version_name rel_helm_prod)
-            - export BE_IMG=$(shipctl get_resource_version_key released_be_img sourceName)
-            - export BE_TAG=$(shipctl get_resource_version_name released_be_img)
-            - export FE_IMG=$(shipctl get_resource_version_key released_fe_img sourceName)
-            - export FE_TAG=$(shipctl get_resource_version_name released_fe_img)
-            - shipctl replace ./deploys/values.yaml
-            - helm upgrade --install $APP_VERSION ./deploys
-            - popd
-    flags:
-      - gke
-      - cd
-
-# Test Deploy LB with helm
-  - name: deployGKEProdLBHelm
-    type: runSh
-    dependencyMode: strict
-    steps:
-      - IN: deployGKEProdAppHelm
-      - IN: gcloud_cli
-        switch: off
-      - IN: gke_cluster
-        switch: off
-      - IN: ops_repo
-        switch: off
-      - TASK:
-          runtime:
-            options:
-              env:
-                - ENVIRONMENT: "prod"
-                - TOOLSET: "helm"
-          script:
-            - pushd $(shipctl get_resource_state "ops_repo")
-            - export CLUST=$(shipctl get_resource_version_key gke_cluster sourceName)
-            - export CLUST_REG=$(shipctl get_resource_version_key gke_cluster region)
-            - gcloud container clusters get-credentials $CLUST --zone $CLUST_REG
-            - which helm
-            - helm init
-            - cd helmCharts
-            - export FE_LABEL=$TOOLSET"-fe-"$ENVIRONMENT
-            - export BE_LABEL=$TOOLSET"-be-"$ENVIRONMENT
-            - export APP_VERSION=latest
-            - shipctl replace ./services/values.yaml
-            - helm upgrade --install $APP_VERSION ./services
-            - popd
-    flags:
-      - gke
-      - cd
+## Create Helm PROD Release
+#  - name: rel_helm_prod
+#    type: release
+#    steps:
+#      - IN: seed_version_app
+#        switch: off
+#      - IN: auto_bvt
+#        switch: off
+#      - IN: validated_be_img
+#        switch: off
+#      - IN: validated_fe_img
+#        switch: off
+#      - TASK: managed
+#        bump: minor
+#      - OUT: released_be_img
+#        replicate: validated_be_img
+#      - OUT: released_fe_img
+#        replicate: validated_fe_img
+#    notify:
+#      - on_success: slack_not
+#    flags:
+#      - gke
+#      - cd
+#
+###################################################################
+##### GKE App PROD Helm Jobs
+###################################################################
+## Test Deploy app with helm
+#  - name: deployGKEProdAppHelm
+#    type: runSh
+#    dependencyMode: strict
+#    steps:
+#      - IN: gcloud_cli
+#      - IN: rel_helm_prod
+#      - IN: released_be_img
+#      - IN: released_fe_img
+#      - IN: gke_cluster
+#      - IN: ops_repo
+#        switch: off
+#      - TASK:
+#          runtime:
+#            options:
+#              env:
+#                - ENVIRONMENT: "prod"
+#                - TOOLSET: "helm"
+#          script:
+#            - pushd $(shipctl get_resource_state "ops_repo")
+#            - export CLUST=$(shipctl get_resource_version_key gke_cluster sourceName)
+#            - export CLUST_REG=$(shipctl get_resource_version_key gke_cluster region)
+#            - gcloud container clusters get-credentials $CLUST --zone $CLUST_REG
+#            - which helm
+#            - helm init
+#            - cd helmCharts
+#            - export FE_LABEL=$TOOLSET"-fe-"$ENVIRONMENT
+#            - export BE_LABEL=$TOOLSET"-be-"$ENVIRONMENT
+#            - export APP_VERSION=$(shipctl get_resource_version_name rel_helm_prod)
+#            - export BE_IMG=$(shipctl get_resource_version_key released_be_img sourceName)
+#            - export BE_TAG=$(shipctl get_resource_version_name released_be_img)
+#            - export FE_IMG=$(shipctl get_resource_version_key released_fe_img sourceName)
+#            - export FE_TAG=$(shipctl get_resource_version_name released_fe_img)
+#            - shipctl replace ./deploys/values.yaml
+#            - helm upgrade --install $APP_VERSION ./deploys
+#            - popd
+#    flags:
+#      - gke
+#      - cd
+#
+## Test Deploy LB with helm
+#  - name: deployGKEProdLBHelm
+#    type: runSh
+#    dependencyMode: strict
+#    steps:
+#      - IN: deployGKEProdAppHelm
+#      - IN: gcloud_cli
+#        switch: off
+#      - IN: gke_cluster
+#        switch: off
+#      - IN: ops_repo
+#        switch: off
+#      - TASK:
+#          runtime:
+#            options:
+#              env:
+#                - ENVIRONMENT: "prod"
+#                - TOOLSET: "helm"
+#          script:
+#            - pushd $(shipctl get_resource_state "ops_repo")
+#            - export CLUST=$(shipctl get_resource_version_key gke_cluster sourceName)
+#            - export CLUST_REG=$(shipctl get_resource_version_key gke_cluster region)
+#            - gcloud container clusters get-credentials $CLUST --zone $CLUST_REG
+#            - which helm
+#            - helm init
+#            - cd helmCharts
+#            - export FE_LABEL=$TOOLSET"-fe-"$ENVIRONMENT
+#            - export BE_LABEL=$TOOLSET"-be-"$ENVIRONMENT
+#            - export APP_VERSION=latest
+#            - shipctl replace ./services/values.yaml
+#            - helm upgrade --install $APP_VERSION ./services
+#            - popd
+#    flags:
+#      - gke
+#      - cd
 
 
 
