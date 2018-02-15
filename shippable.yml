@@ -38,7 +38,7 @@ resources:
       versionName: latest
 
 # Docker Image
-  - name: release_be_img
+  - name: released_be_img
     type: image
     integration: demo_dh # replace with your integration name
     versionTemplate:
