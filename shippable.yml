@@ -16,6 +16,16 @@ resources:
         - "#demo"
 
 ##################################################################
+#### Application Release Automation Resources
+##################################################################
+
+# Set app version seed
+  - name: seed_version_app
+    type: version
+    versionTemplate:
+      versionName: "1.0.0"
+
+##################################################################
 #### GKE App Prod Resources
 ##################################################################
 #
@@ -77,16 +87,6 @@ resources:
 #      params:
 #        REDIS: "prod-be-lb"
 
-##################################################################
-#### Application Release Automation Resources
-##################################################################
-
-# Set app version seed
-  - name: seed_version_app
-    type: version
-    versionTemplate:
-      versionName: "1.0.0"
-
 ###################################################################
 ##### Prod application params
 ###################################################################
@@ -124,27 +124,31 @@ resources:
 jobs:
 
 ##################################################################
+################### Production Release Job
+##################################################################
+
+# Create Helm PROD Release
+  - name: rel_helm_prod
+    type: release
+    steps:
+      - IN: seed_version_app
+        switch: off
+      - IN: auto_bvt
+        switch: off
+      - TASK: managed
+        bump: minor
+    notify:
+      - on_success: slack_not
+    flags:
+      - gke
+      - cd
+
+
+##################################################################
 ################### Google Cloud Kubernetes Jobs
 ##################################################################
 
-## Create GKE PROD Release
-#  - name: rel_gke_prod
-#    type: release
-#    steps:
-#      - IN: seed_version_app
-#        switch: off
-#      - IN: auto_bvt
-#        switch: off
-#      - IN: deployGKEAppTest
-#        switch: off
-#      - TASK: managed
-#        bump: minor
-#    notify:
-#      - on_success: slack_not
-#    flags:
-#      - gke
-#      - cd
-#
+
 ## GKE PROD Env Deploy
 #  - name: deployGKEAppProd
 #    type: deploy
