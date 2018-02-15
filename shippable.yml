@@ -20,7 +20,7 @@ resources:
     type: gitRepo
     integration: "demo_github"
     versionTemplate:
-      sourceName: "aye0aye/test"
+      sourceName: "aye0aye/ops"
       branch: master
 
 ##################################################################
