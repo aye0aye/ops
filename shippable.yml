@@ -124,7 +124,7 @@ jobs:
             - export BE_TAG=$(shipctl get_resource_version_name released_be_img)
             - export FE_IMG=$(shipctl get_resource_version_key released_fe_img sourceName)
             - export FE_TAG=$(shipctl get_resource_version_name released_fe_img)
-            - shipctl replace ./deploys/values.yaml
+            - shipctl replace ./deploy/Chart.yaml ./deploys/values.yaml
             - helm upgrade --install --namespace $ENVIRONMENT $APP_NAME ./deploys
             - shipctl put_resource_state $JOB_NAME versionName $APP_VERSION
             - popd
@@ -162,7 +162,7 @@ jobs:
             - export BE_LABEL=$TOOLSET"-be-"$ENVIRONMENT
             - export APP_NAME=$TOOLSET"-lb-"$ENVIRONMENT
             - export APP_VERSION=$(shipctl get_resource_version_name deployGKEProdAppHelm)
-            - shipctl replace ./services/values.yaml
+            - shipctl replace ./services/Chart.yaml ./services/values.yaml
             - helm upgrade --install --namespace $ENVIRONMENT $APP_NAME ./services
             - shipctl put_resource_state $JOB_NAME versionName $APP_VERSION
             - popd
