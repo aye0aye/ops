@@ -164,7 +164,6 @@ jobs:
             - export APP_VERSION=$(shipctl get_resource_version_name deployGKEProdAppHelm)
             - shipctl replace ./services/Chart.yaml ./services/values.yaml
             - helm upgrade --install --namespace $ENVIRONMENT $APP_NAME ./services
-            - echo $APP_VERSION
             - shipctl post_resource_state_multi $JOB_NAME "versionName=$APP_VERSION"
             - popd
     flags:
