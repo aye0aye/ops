@@ -126,7 +126,7 @@ jobs:
             - export FE_TAG=$(shipctl get_resource_version_name released_fe_img)
             - shipctl replace ./deploys/Chart.yaml ./deploys/values.yaml
             - helm upgrade --install --namespace $ENVIRONMENT $APP_NAME ./deploys
-            - shipctl put_resource_state $JOB_NAME versionName $APP_VERSION
+            - shipctl post_resource_state_multi $JOB_NAME "versionName=$APP_VERSION"
             - popd
     flags:
       - gke
@@ -164,8 +164,8 @@ jobs:
             - export APP_VERSION=$(shipctl get_resource_version_name deployGKEProdAppHelm)
             - shipctl replace ./services/Chart.yaml ./services/values.yaml
             - helm upgrade --install --namespace $ENVIRONMENT $APP_NAME ./services
-            - echo $JOB_NAME
-            - shipctl put_resource_state $JOB_NAME versionName $APP_VERSION
+            - echo $APP_VERSION
+            - shipctl post_resource_state_multi $JOB_NAME "versionName=$APP_VERSION"
             - popd
     flags:
       - gke
